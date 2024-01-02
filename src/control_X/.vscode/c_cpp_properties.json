@@ -1,0 +1,58 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/shambhuraj/manipulator_ws/install/open_manipulator_x_libs/include/**",
+        "/home/shambhuraj/manipulator_ws/install/robotis_manipulator/include/**",
+        "/home/shambhuraj/manipulator_ws/install/open_manipulator_msgs/include/**",
+        "/home/shambhuraj/manipulator_ws/install/dynamixel_workbench_toolbox/include/**",
+        "/home/shambhuraj/manipulator_ws/install/dynamixel_sdk_custom_interfaces/include/**",
+        "/home/shambhuraj/manipulator_ws/install/dynamixel_sdk/include/**",
+        "/home/shambhuraj/ros2_ws/install/nav2_smoother/include/**",
+        "/home/shambhuraj/ros2_ws/install/nav2_controller/include/**",
+        "/home/shambhuraj/ros2_ws/install/dwb_plugins/include/**",
+        "/home/shambhuraj/ros2_ws/install/dwb_critics/include/**",
+        "/home/shambhuraj/ros2_ws/install/dwb_core/include/**",
+        "/home/shambhuraj/ros2_ws/install/nav_2d_utils/include/**",
+        "/home/shambhuraj/ros2_ws/install/dwb_msgs/include/**",
+        "/home/shambhuraj/ros2_ws/install/nav_2d_msgs/include/**",
+        "/home/shambhuraj/ros2_ws/install/nav2_waypoint_follower/include/**",
+        "/home/shambhuraj/ros2_ws/install/nav2_theta_star_planner/include/**",
+        "/home/shambhuraj/ros2_ws/install/nav2_smac_planner/include/**",
+        "/home/shambhuraj/ros2_ws/install/nav2_rotation_shim_controller/include/**",
+        "/home/shambhuraj/ros2_ws/install/nav2_regulated_pure_pursuit_controller/include/**",
+        "/home/shambhuraj/ros2_ws/install/nav2_planner/include/**",
+        "/home/shambhuraj/ros2_ws/install/nav2_navfn_planner/include/**",
+        "/home/shambhuraj/ros2_ws/install/nav2_constrained_smoother/include/**",
+        "/home/shambhuraj/ros2_ws/install/nav2_bt_navigator/include/**",
+        "/home/shambhuraj/ros2_ws/install/nav2_behaviors/include/**",
+        "/home/shambhuraj/ros2_ws/install/nav2_core/include/**",
+        "/home/shambhuraj/ros2_ws/install/nav2_collision_monitor/include/**",
+        "/home/shambhuraj/ros2_ws/install/costmap_queue/include/**",
+        "/home/shambhuraj/ros2_ws/install/nav2_costmap_2d/include/**",
+        "/home/shambhuraj/ros2_ws/install/nav2_voxel_grid/include/**",
+        "/home/shambhuraj/ros2_ws/install/nav2_velocity_smoother/include/**",
+        "/home/shambhuraj/ros2_ws/install/nav2_rviz_plugins/include/**",
+        "/home/shambhuraj/ros2_ws/install/nav2_map_server/include/**",
+        "/home/shambhuraj/ros2_ws/install/nav2_lifecycle_manager/include/**",
+        "/home/shambhuraj/ros2_ws/install/nav2_behavior_tree/include/**",
+        "/home/shambhuraj/ros2_ws/install/nav2_amcl/include/**",
+        "/home/shambhuraj/ros2_ws/install/nav2_util/include/**",
+        "/home/shambhuraj/ros2_ws/install/nav2_msgs/include/**",
+        "/home/shambhuraj/ros2_ws/install/custom_interface/include/**",
+        "/opt/ros/humble/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

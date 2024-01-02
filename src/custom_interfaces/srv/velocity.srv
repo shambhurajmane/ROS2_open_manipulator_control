@@ -1,0 +1,16 @@
+float64 theta1
+float64 theta2
+float64 theta3
+float64 theta4
+
+float64 velocity1
+float64 velocity2
+float64 velocity3
+float64 velocity4
+---
+float64 linearX
+float64 linearY
+float64 linearZ
+float64 rotX
+float64 rotY
+float64 rotZ

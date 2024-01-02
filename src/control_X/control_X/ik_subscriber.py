@@ -1,0 +1,139 @@
+
+
+import rclpy
+from rclpy.node import Node
+import math
+import numpy as np
+from geometry_msgs.msg import Pose
+from std_msgs.msg import Float32MultiArray
+
+from open_manipulator_msgs.msg import KinematicsPose
+
+
+#takes in an euler angle (ZYX) and returns the x column of the rotation matrix
+def EulerToRot(x, y, z):
+        zRot = [[math.cos(z), math.sin(z), 0],
+                [-math.sin(z), math.cos(z), 0],
+                [0, 0, 1]]
+        
+        yRot = [[math.cos(y), 0, -math.sin(y)],
+                [0, 1, 0],
+                [math.sin(y), 0, math.cos(y)]]
+        
+        xRot = [[1, 0, 0],
+                [0, math.cos(x), math.sin(x)],
+                [0, -math.sin(x), math.cos(x)]]
+
+        Rot = np.dot(xRot, np.dot(yRot,zRot))
+        invRot = np.linalg.inv(Rot)
+        #print(invRot)
+        xVector = [invRot[0][0], invRot[1][0], invRot[2][0]]
+        return(xVector)
+
+#takes in a vector and returns the angle from the vector to the horizontal plane
+def phiAngle(xVector):
+     phi = np.arctan2(xVector[2],(np.sqrt(xVector[0]**2 + xVector[1]**2)))
+     return phi
+
+class QuatSubscriber(Node):
+
+    def __init__(self):
+        super().__init__('joint_value_subscriber')
+        self.subscription1 = self.create_subscription(
+            KinematicsPose,
+            '/kinematics_pose',
+            self.pose_value_callback,
+            10)
+        self.subscription1  # prevent unused variable warning
+        
+        # self.publisher_ = self.create_publisher(Float32MultiArray, 'dh_topic', 10)
+    
+
+
+
+    def pose_value_callback(self, msg):                                                
+        # self.get_logger().info('Incoming request\na: %f b: %f c: %f d: %f e: %f f: %f g: %f' % (request.x, request.y, request.z, request.qx, request.qy, request.qz, request.qw))  
+
+        q = [0, 0, 0, 0, 0, 0, 0]
+        q[0]=msg.pose.position.x
+        q[1]=msg.pose.position.y
+        q[2]=msg.pose.position.z
+        q[3]=msg.pose.orientation.x
+        q[4]=msg.pose.orientation.y
+        q[5]=msg.pose.orientation.z
+        q[6]=msg.pose.orientation.w
+
+        angles = [0, 0, 0]
+
+        #link lengths
+        l1 = 0.05716 #0.096326 old value
+        l2 = 0.13023
+        l3 = 0.124
+        l4 = 0.1334
+
+        #Quaternions to Euler angles (ZYX)
+        # roll (x-axis rotation)
+        sinr_cosp = 2 * (q[6] * q[3] + q[4] * q[5])
+        cosr_cosp = 1 - 2 * (q[3] * q[3] + q[4] * q[4])
+        angles[0] = math.atan2(sinr_cosp, cosr_cosp)
+
+        # pitch (y-axis rotation)
+        sinp = math.sqrt(1 + 2 * (q[6] * q[4] - q[3] * q[5]))
+        cosp = math.sqrt(1 - 2 * (q[6] * q[4] - q[3] * q[5]))
+        angles[1] = 2 * math.atan2(sinp, cosp) - math.pi / 2
+
+        # yaw (z-axis rotation)
+        siny_cosp = 2 * (q[6] * q[5] + q[3] * q[4])
+        cosy_cosp = 1 - 2 * (q[4] * q[4] + q[5] * q[5])
+        angles[2] = math.atan2(siny_cosp, cosy_cosp)      
+
+        #print('roll: ', angles[0], ', pitch: ', angles[1], ', yaw: ', angles[2])
+
+
+        x = EulerToRot(angles[0], angles[1], angles[2])
+        phi = phiAngle(x)
+        #print("phi: " + str(phi))
+        
+        theta1 = np.arctan2(q[1], q[0])
+        alpha = np.sqrt(q[0]**2 + q[1]**2)
+        #print("alpha: " + str(alpha))
+
+        #wAlpha and wZ are for the wrist joint relative to joint 2
+        wAlpha = alpha - l4*math.cos(phi)
+        wZ = (q[2] - l1) - l4*math.sin(phi)
+        #print("wAlpha: " + str(wAlpha))
+        #print("wZ: " + str(wZ))
+
+        preTheta3 = -np.arccos((wAlpha**2 + wZ**2 -(l2**2 + l3**2))/(2*l2*l3))
+        preTheta2 = np.arctan2(wZ, wAlpha) - np.arctan2((l3*math.sin(preTheta3)), (l2 + l3*math.cos(preTheta3)))
+
+        theta4 = phi - preTheta3 - preTheta2
+
+        #adjusted values for home configuration
+        theta3 = preTheta3 + 1.38544838
+        theta2 = preTheta2 - 1.38544838
+
+
+        
+        print("values are", theta1, theta2 , theta3 , theta4)
+        # return response
+        # msg = Float32MultiArray()
+        # msg.data = [dx , dy, dz]
+        # self.publisher_.publish(msg)
+
+def main(args=None):
+    rclpy.init(args=args)
+
+    quat_subscriber = QuatSubscriber()
+
+    rclpy.spin(quat_subscriber)
+
+    # Destroy the node explicitly
+    # (optional - otherwise it will be done automatically
+    # when the garbage collector destroys the node object)
+    quat_subscriber.destroy_node()
+    rclpy.shutdown()
+
+
+if __name__ == '__main__':
+    main()
