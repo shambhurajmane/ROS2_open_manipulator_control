@@ -3,7 +3,7 @@
 
 ## Introduction
 The repository includes four implementations:
-*    Part 1: Forward Kinematics, Inverse kinamatics and pick and place 
+*    Forward Kinematics, Inverse kinamatics and pick and place 
      *   Forward kinematics subscriber node calculates end effector pose.
      *   Inverse kinematics subscriber node with a service client that receives the desired end effector pose from the user and returns joint positions as a response.
      *   Pick and place node executes a sequence where the robot moves to the calculated position, picks up the object, and place it; additionally, incorporate an intermediate gripper position above the object for effective picking and lifting maneuvers.
